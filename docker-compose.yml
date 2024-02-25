@@ -1,0 +1,26 @@
+version: "2"
+services:
+  app:
+    container_name: app
+    restart: always
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports: 
+      - "27017:27017"
+    command:
+      - "--logpath"
+      - "/var/log/mongodb/mongodb.log"
