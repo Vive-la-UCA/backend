@@ -1,7 +1,7 @@
 version: "2"
 services:
   app:
-    container_name: app
+    container_name: vive_la_uca
     restart: always
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
