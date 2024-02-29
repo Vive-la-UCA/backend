@@ -3,10 +3,11 @@ const { usersPost, usersGet } = require("../controllers/user");
 const { check } = require("express-validator");
 const { emailExists } = require("../helpers/db-validators");
 const { validateFields } = require("../middlewares/validate-fields");
+const { validateJWT } = require("../middlewares/validate-jwt");
 
 const router = Router();
 
-router.get("/", usersGet);
+router.get("/", validateJWT, usersGet);
 
 router.post(
   "/",
