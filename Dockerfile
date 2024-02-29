@@ -1,6 +1,7 @@
-FROM node:20
+FROM node:21
 
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
@@ -9,4 +10,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 8080
-CMD ["npm", "start"]
+
+CMD ["npm", "run", "dev"]

@@ -10,6 +10,7 @@ class Server {
     this.port = process.env.PORT;
 
     this.testPath = "/api/test";
+    this.userPath = "/api/users";
 
     this.connectingDB();
     this.middlewares();
@@ -29,6 +30,7 @@ class Server {
 
   routes() {
     this.app.use(this.testPath, require("../routes/test"));
+    this.app.use(this.userPath, require("../routes/user"));
   }
 
   listen() {
