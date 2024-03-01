@@ -12,15 +12,8 @@ const LocationSchema = Schema({
     type: String,
   },
   coordinates: {
-    type: {
-      type: String,
-      default: "Point",
-      required: true,
-    },
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
+    type: [Number],
+    required: true,
   },
 });
 

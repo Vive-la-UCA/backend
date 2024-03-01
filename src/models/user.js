@@ -15,6 +15,9 @@ const UserSchema = Schema(
       type: String,
       required: [true, "Password is required"],
     },
+    image: {
+      type: String,
+    },
     role: {
       type: String,
       default: "USER_ROLE",
@@ -22,6 +25,10 @@ const UserSchema = Schema(
     status: {
       type: Boolean,
       default: true,
+    },
+    google: {
+      type: Boolean,
+      default: false,
     },
   },
   {
