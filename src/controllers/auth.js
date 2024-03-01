@@ -1,8 +1,7 @@
 const { response } = require("express");
 const bcrypt = require("bcryptjs");
-const User = require("../models/user");
-const { generateJWT } = require("../helpers/generate-jwt");
-const { googleVerify } = require("../helpers/google-verify");
+const { User } = require("../models");
+const { generateJWT, googleVerify } = require("../helpers");
 
 const login = async (req, res = response) => {
   const { email, password } = req.body;
@@ -47,15 +46,7 @@ const login = async (req, res = response) => {
 };
 
 const loginGoogle = async (req, res = response) => {
-  const authHeader = req.header("Authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res
-      .status(401)
-      .json({ msg: "Google ID token not provided or in the correct format" });
-  }
-
-  const id_token = authHeader.split(" ")[1];
+  const id_token = req.token;
 
   try {
     const { name, email, picture } = await googleVerify(id_token);
