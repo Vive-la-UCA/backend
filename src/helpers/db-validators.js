@@ -8,6 +8,15 @@ const emailExists = async (email = "") => {
   }
 };
 
+const routeExistsById = async (id = "") => {
+  const exists = await Route.findById(id);
+
+  if (!exists) {
+    throw new Error(`The route with id ${id} does not exist`);
+  }
+};
+
 module.exports = {
   emailExists,
+  routeExistsById,
 };

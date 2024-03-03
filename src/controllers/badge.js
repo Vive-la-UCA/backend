@@ -1,5 +1,5 @@
 const { response } = require("express");
-const { Badge } = require("../models");
+const { Badge, Route } = require("../models");
 
 const badgeGet = async (req, res = response) => {
   const { limit = 5, skip = 0 } = req.query;
@@ -24,6 +24,14 @@ const badgePost = async (req, res = response) => {
   if (badge) {
     return res.status(400).json({
       msg: "Badge already exists",
+    });
+  }
+
+  // check if the route exists
+  const routeExists = await Route.findById(route);
+  if (!routeExists) {
+    return res.status(400).json({
+      msg: "Route does not exist",
     });
   }
 
