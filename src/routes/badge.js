@@ -1,25 +1,20 @@
 const { Router } = require("express");
-const { routePost, routeGet } = require("../controllers/route");
+const { badgeGet, badgePost } = require("../controllers/badge");
 const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
 const { check } = require("express-validator");
 
 const router = Router();
 
-router.get("/", [validateJWT, validateFields], routeGet);
-
+router.get("/", [validateJWT, validateFields], badgeGet);
 router.post(
   "/",
-
   [
     check("name", "name is required").not().isEmpty(),
-    check("locations", "locations are required")
-      .isArray()
-      .withMessage("locations must be an array of strings"),
     validateJWT,
     isAdminRole,
     validateFields,
   ],
-  routePost
+  badgePost
 );
 
 module.exports = router;

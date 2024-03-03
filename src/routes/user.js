@@ -6,7 +6,7 @@ const { validateFields, validateJWT } = require("../middlewares");
 
 const router = Router();
 
-router.get("/", validateJWT, usersGet);
+router.get("/", [validateJWT, validateFields], usersGet);
 
 router.post(
   "/",

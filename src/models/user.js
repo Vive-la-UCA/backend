@@ -30,6 +30,26 @@ const UserSchema = Schema(
       type: Boolean,
       default: false,
     },
+    progress: [
+      {
+        start: Date,
+        end: Date,
+        route: {
+          type: Schema.Types.ObjectId,
+          ref: "Route",
+        },
+        visitedLocations: [
+          {
+            type: Schema.Types.ObjectId,
+            ref: "Location",
+          },
+        ],
+        status: {
+          type: Boolean,
+          default: false,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

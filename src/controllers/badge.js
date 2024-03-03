@@ -1,0 +1,41 @@
+const { response } = require("express");
+const { Badge } = require("../models");
+
+const badgeGet = async (req, res = response) => {
+  const { limit = 5, skip = 0 } = req.query;
+  const query = {};
+
+  const [total, badges] = await Promise.all([
+    Badge.countDocuments(query),
+    Badge.find(query).limit(Number(limit)).skip(Number(skip)),
+  ]);
+
+  res.json({
+    total,
+    badges,
+  });
+};
+
+const badgePost = async (req, res = response) => {
+  const { name, image, route } = req.body;
+
+  // check if the name exists
+  const badge = await Badge.findOne({ name });
+  if (badge) {
+    return res.status(400).json({
+      msg: "Badge already exists",
+    });
+  }
+
+  const newBadge = new Badge({ name, image, route });
+  await newBadge.save();
+
+  res.json({
+    newBadge,
+  });
+};
+
+module.exports = {
+  badgeGet,
+  badgePost,
+};

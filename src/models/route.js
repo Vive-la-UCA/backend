@@ -9,6 +9,7 @@ const RouteSchema = Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Location",
+      required: [true, "Location is required"],
     },
   ],
 });
