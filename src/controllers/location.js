@@ -16,6 +16,16 @@ const locationGet = async (req, res = response) => {
   });
 };
 
+const locationGetOne = async (req, res = response) => {
+  const { id } = req.params;
+
+  const location = await Location.findById(id);
+
+  res.json({
+    location,
+  });
+};
+
 const locationPost = async (req, res = response) => {
   const { name, description, image, coordinates } = req.body;
   const location = new Location({ name, description, image, coordinates });
@@ -29,5 +39,6 @@ const locationPost = async (req, res = response) => {
 
 module.exports = {
   locationGet,
+  locationGetOne,
   locationPost,
 };

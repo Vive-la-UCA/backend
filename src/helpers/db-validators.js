@@ -1,4 +1,4 @@
-const { Route, User, Badge } = require("../models");
+const { Route, User, Badge, Location } = require("../models");
 
 const emailExists = async (email = "") => {
   const exists = await User.findOne({ email });
@@ -16,6 +16,14 @@ const badgeExistsById = async (id = "") => {
   }
 };
 
+const locationExistsById = async (id = "") => {
+  const exists = await Location.findById(id);
+
+  if (!exists) {
+    throw new Error(`The location with id ${id} does not exist`);
+  }
+};
+
 const routeExistsById = async (id = "") => {
   const exists = await Route.findById(id);
 
@@ -27,5 +35,6 @@ const routeExistsById = async (id = "") => {
 module.exports = {
   emailExists,
   badgeExistsById,
+  locationExistsById,
   routeExistsById,
 };
