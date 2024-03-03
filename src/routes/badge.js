@@ -1,12 +1,26 @@
 const { Router } = require("express");
-const { badgeGet, badgePost } = require("../controllers/badge");
+const { badgeGet, badgePost, badgeGetOne } = require("../controllers/badge");
 const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
 const { check } = require("express-validator");
-const { routeExistsById } = require("../helpers");
+const { badgeExistsById } = require("../helpers");
 
 const router = Router();
 
+// Get All Badges
 router.get("/", [validateJWT, validateFields], badgeGet);
+
+// Get One Badge
+router.get(
+  "/:id",
+  [
+    check("id", "Invalid id").isMongoId(),
+    check("id").custom(badgeExistsById),
+    validateJWT,
+    validateFields,
+  ],
+  badgeGetOne
+);
+
 router.post(
   "/",
   [

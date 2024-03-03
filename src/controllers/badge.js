@@ -16,6 +16,16 @@ const badgeGet = async (req, res = response) => {
   });
 };
 
+const badgeGetOne = async (req, res = response) => {
+  const { id } = req.params;
+
+  const badge = await Badge.findById(id).populate("route", "name");
+
+  res.json({
+    badge,
+  });
+};
+
 const badgePost = async (req, res = response) => {
   const { name, image, route } = req.body;
 
@@ -45,5 +55,6 @@ const badgePost = async (req, res = response) => {
 
 module.exports = {
   badgeGet,
+  badgeGetOne,
   badgePost,
 };
