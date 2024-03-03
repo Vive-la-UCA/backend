@@ -24,6 +24,14 @@ const locationExistsById = async (id = "") => {
   }
 };
 
+const userExistsById = async (id = "") => {
+  const exists = await User.findById(id);
+
+  if (!exists) {
+    throw new Error(`The user with id ${id} does not exist`);
+  }
+};
+
 const routeExistsById = async (id = "") => {
   const exists = await Route.findById(id);
 
@@ -35,6 +43,7 @@ const routeExistsById = async (id = "") => {
 module.exports = {
   emailExists,
   badgeExistsById,
+  userExistsById,
   locationExistsById,
   routeExistsById,
 };
