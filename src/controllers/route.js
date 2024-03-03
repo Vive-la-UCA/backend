@@ -1,5 +1,5 @@
 const { response } = require("express");
-const { Route } = require("../models");
+const { Route, Location } = require("../models");
 
 const routeGet = async (req, res = response) => {
   const { limit = 5, skip = 0 } = req.query;
@@ -26,6 +26,14 @@ const routePost = async (req, res = response) => {
       msg: "Route already exists",
     });
   }
+
+   // check if all locations exist in the database
+   const existingLocations = await Location.find({ _id: { $in: locations } }).distinct('_id');
+   if (locations.length !== existingLocations.length) {
+     return res.status(400).json({
+       msg: "One or more locations do not exist",
+     });
+   }
 
   const newRoute = new Route({ name, locations });
 
