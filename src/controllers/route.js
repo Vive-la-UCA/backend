@@ -16,6 +16,16 @@ const routeGet = async (req, res = response) => {
   });
 };
 
+const routeGetOne = async (req, res = response) => {
+  const { id } = req.params;
+
+  const route = await Route.findById(id).populate("locations", "name");
+
+  res.json({
+    route,
+  });
+};
+
 const routePost = async (req, res = response) => {
   const { name, locations } = req.body;
 
@@ -27,13 +37,15 @@ const routePost = async (req, res = response) => {
     });
   }
 
-   // check if all locations exist in the database
-   const existingLocations = await Location.find({ _id: { $in: locations } }).distinct('_id');
-   if (locations.length !== existingLocations.length) {
-     return res.status(400).json({
-       msg: "One or more locations do not exist",
-     });
-   }
+  // check if all locations exist in the database
+  const existingLocations = await Location.find({
+    _id: { $in: locations },
+  }).distinct("_id");
+  if (locations.length !== existingLocations.length) {
+    return res.status(400).json({
+      msg: "One or more locations do not exist",
+    });
+  }
 
   const newRoute = new Route({ name, locations });
 
@@ -46,5 +58,6 @@ const routePost = async (req, res = response) => {
 
 module.exports = {
   routeGet,
+  routeGetOne,
   routePost,
 };
