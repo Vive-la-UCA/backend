@@ -91,7 +91,16 @@ const loginGoogle = async (req, res = response) => {
   }
 };
 
+const checkToken = async (req, res = response) => {
+  const user = req.user;
+
+  res.json({
+    user,
+  });
+};
+
 module.exports = {
+  checkToken,
   login,
   loginGoogle,
 };
