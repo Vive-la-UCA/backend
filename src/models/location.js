@@ -11,13 +11,15 @@ const LocationSchema = Schema({
   image: {
     type: String,
   },
-  coordinates: {
-    type: [Number],
+  latitude: {
+    type: Number,
+    required: true,
+  },
+  longitude: {
+    type: Number,
     required: true,
   },
 });
-
-LocationSchema.index({ coordinates: "2dsphere" });
 
 LocationSchema.methods.toJSON = function () {
   const { __v, _id, ...location } = this.toObject();

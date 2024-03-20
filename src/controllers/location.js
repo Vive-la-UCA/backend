@@ -27,8 +27,16 @@ const locationGetOne = async (req, res = response) => {
 };
 
 const locationPost = async (req, res = response) => {
-  const { name, description, image, coordinates } = req.body;
-  const location = new Location({ name, description, image, coordinates });
+  const { name, description, latitude, longitude } = req.body;
+  const image = req.file.path;
+
+  const location = new Location({
+    name,
+    description,
+    image,
+    latitude,
+    longitude,
+  });
 
   await location.save();
 

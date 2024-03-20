@@ -7,6 +7,7 @@ const {
 const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
 const { check } = require("express-validator");
 const { locationExistsById } = require("../helpers");
+const { upload } = require("../middlewares/multer-file");
 
 const router = Router();
 
@@ -29,9 +30,11 @@ router.get(
 router.post(
   "/",
   [
-    check("name", "name is required").not().isEmpty(),
-    check("coordinates", "coordinates are required").isArray(),
     validateJWT,
+    upload.single("image"),
+    check("name", "name is required").not().isEmpty(),
+    check("latitude", "latitude is required").not().isEmpty(),
+    check("longitude", "longitude is required").not().isEmpty(),
     isAdminRole,
     validateFields,
   ],
