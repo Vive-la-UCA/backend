@@ -28,6 +28,7 @@ const routeGetOne = async (req, res = response) => {
 
 const routePost = async (req, res = response) => {
   const { name, locations } = req.body;
+  const image = req.file.path;
 
   // check if the name exists
   const route = await Route.findOne({ name });
@@ -47,7 +48,7 @@ const routePost = async (req, res = response) => {
     });
   }
 
-  const newRoute = new Route({ name, locations });
+  const newRoute = new Route({ name, image, locations });
 
   await newRoute.save();
 

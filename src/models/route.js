@@ -5,6 +5,9 @@ const RouteSchema = Schema({
     type: String,
     required: [true, "Name is required"],
   },
+  image: {
+    type: String,
+  },
   locations: [
     {
       type: Schema.Types.ObjectId,

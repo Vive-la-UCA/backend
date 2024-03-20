@@ -13,11 +13,11 @@ const LocationSchema = Schema({
   },
   latitude: {
     type: Number,
-    required: true,
+    required: [true, "Latitude is required"],
   },
   longitude: {
     type: Number,
-    required: true,
+    required: [true, "Longitude is required"],
   },
 });
 
