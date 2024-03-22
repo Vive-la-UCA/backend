@@ -31,10 +31,6 @@ router.post(
     validateJWT,
     upload.single("image"),
     check("name", "name is required").not().isEmpty(),
-    check("locations", "locations are required")
-      .isArray()
-      .custom((location) => location.every(isValidObjectId))
-      .withMessage("check locations are valid ObjectId's"),
     isAdminRole,
     validateFields,
   ],

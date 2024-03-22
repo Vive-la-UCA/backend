@@ -38,16 +38,6 @@ const routePost = async (req, res = response) => {
     });
   }
 
-  // check if all locations exist in the database
-  const existingLocations = await Location.find({
-    _id: { $in: locations },
-  }).distinct("_id");
-  if (locations.length !== existingLocations.length) {
-    return res.status(400).json({
-      msg: "One or more locations do not exist",
-    });
-  }
-
   const newRoute = new Route({ name, image, locations });
 
   await newRoute.save();

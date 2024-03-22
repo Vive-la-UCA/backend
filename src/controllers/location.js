@@ -44,6 +44,10 @@ const locationPost = async (req, res = response) => {
     location,
   });
 };
+      
+const locationPut = async (req, res = response) => {
+  const { id } = req.params;
+}
 
 module.exports = {
   locationGet,

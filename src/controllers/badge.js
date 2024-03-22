@@ -29,11 +29,15 @@ const badgeGetOne = async (req, res = response) => {
 const badgePost = async (req, res = response) => {
   // Multer middleware has already handled file upload, so the filename is available in req.file.filename
   const { name, route } = req.body;
-  const image = req.file.path; // Get the filename of the uploaded image
+  const image = req.file.filename;
 
   // Check if the name exists
   const badge = await Badge.findOne({ name });
   if (badge) {
+    // If there's an error, delete the uploaded image
+    if (req.file) {
+      fs.unlinkSync(req.file.path); // Delete the uploaded file
+    }
     return res.status(400).json({
       msg: "Badge already exists",
     });
@@ -42,6 +46,11 @@ const badgePost = async (req, res = response) => {
   // Check if the route exists
   const routeExists = await Route.findById(route);
   if (!routeExists) {
+    // If there's an error, delete the uploaded image
+    if (req.file) {
+      fs.unlinkSync(req.file.path); // Delete the uploaded file
+    }
+
     return res.status(400).json({
       msg: "Route does not exist",
     });
@@ -57,6 +66,7 @@ const badgePost = async (req, res = response) => {
     });
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       msg: "Internal server error",
     });
@@ -65,15 +75,40 @@ const badgePost = async (req, res = response) => {
 
 const badgePut = async (req, res = response) => {
   const { id } = req.params;
-  const { name, route } = req.body;
-  const image = req.file.path;
+  const { ...data } = req.body;
+
+  let image;
+
+  if (req.file) {
+    image = req.file.filename;
+  }
 
   try {
-    const updatedBadge = await Badge.findByIdAndUpdate(
-      id,
-      { name, image, route },
-      { new: true }
-    );
+    let updatedBadge;
+
+    if (image) {
+      // remove old image
+      const badge = await Badge.findById(id);
+      if (badge.image) {
+        const pathImage = `./uploads/${badge.image}`;
+
+        if (fs.existsSync(pathImage)) {
+          fs.unlinkSync(pathImage);
+        }
+      }
+
+      updatedBadge = await Badge.findByIdAndUpdate(
+        id,
+        { ...data, image }, // Include image data if present
+        { new: true }
+      );
+    } else {
+      updatedBadge = await Badge.findByIdAndUpdate(
+        id,
+        data, // Update only the data if no image
+        { new: true }
+      );
+    }
 
     res.json({
       updatedBadge,
