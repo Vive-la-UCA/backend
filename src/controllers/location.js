@@ -28,7 +28,7 @@ const locationGetOne = async (req, res = response) => {
 
 const locationPost = async (req, res = response) => {
   const { name, description, latitude, longitude } = req.body;
-  const image = req.file.path;
+  const image = req.file.filename;
 
   const location = new Location({
     name,
@@ -44,13 +44,57 @@ const locationPost = async (req, res = response) => {
     location,
   });
 };
-      
+
 const locationPut = async (req, res = response) => {
   const { id } = req.params;
-}
+  const { ...data } = req.body;
+
+  let image;
+
+  if (req.file) {
+    image = req.file.filename;
+  }
+
+  try {
+    let updatedLocation;
+
+    if (image) {
+      // remove old image
+      const location = await Location.findById(id);
+      if (location.image) {
+        const pathImage = `./uploads/${location.image}`;
+
+        if (fs.existsSync(pathImage)) {
+          fs.unlinkSync(pathImage);
+        }
+      }
+
+      updatedLocation = await Location.findByIdAndUpdate(
+        id,
+        { ...data, image }, // Include image data if present
+        { new: true }
+      );
+    } else {
+      updatedLocation = await Location.findByIdAndUpdate(
+        id,
+        data, // Update only the data if no image
+        { new: true }
+      );
+    }
+
+    res.json({
+      updatedLocation,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Internal server error",
+    });
+  }
+};
 
 module.exports = {
   locationGet,
   locationGetOne,
   locationPost,
+  locationPut,
 };

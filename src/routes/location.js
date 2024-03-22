@@ -3,6 +3,7 @@ const {
   locationPost,
   locationGet,
   locationGetOne,
+  locationPut,
 } = require("../controllers/location");
 const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
 const { check } = require("express-validator");
@@ -39,6 +40,19 @@ router.post(
     validateFields,
   ],
   locationPost
+);
+
+router.put(
+  "/:id",
+  [
+    validateJWT,
+    upload.single("image"),
+    check("id", "Invalid id").isMongoId(),
+    check("id").custom(locationExistsById),
+    isAdminRole,
+    validateFields,
+  ],
+  locationPut
 );
 
 module.exports = router;

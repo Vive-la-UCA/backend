@@ -33,6 +33,9 @@ const routePost = async (req, res = response) => {
   // check if the name exists
   const route = await Route.findOne({ name });
   if (route) {
+    if (req.file) {
+      fs.unlinkSync(req.file.path); // Delete the uploaded file
+    }
     return res.status(400).json({
       msg: "Route already exists",
     });
