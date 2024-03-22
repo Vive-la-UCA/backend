@@ -28,7 +28,7 @@ const routeGetOne = async (req, res = response) => {
 
 const routePost = async (req, res = response) => {
   const { name, locations } = req.body;
-  const image = req.file.path;
+  const image = req.file.filename;
 
   // check if the name exists
   const route = await Route.findOne({ name });
@@ -50,8 +50,55 @@ const routePost = async (req, res = response) => {
   });
 };
 
+const routePut = async (req, res = response) => {
+  const { id } = req.params;
+  const { ...data } = req.body;
+
+  let image;
+
+  if (req.file) {
+    image = req.file.filename;
+  }
+
+  try {
+    let updatedRoute;
+    if (image) {
+      // remove old image
+      const route = await Route.findById(id);
+      if (route.image) {
+        const pathImage = `./uploads/${route.image}`;
+
+        if (fs.existsSync(pathImage)) {
+          fs.unlinkSync(pathImage);
+        }
+      }
+      updatedRoute = await Route.findByIdAndUpdate(
+        id,
+        { ...data, image },
+        { new: true }
+      );
+    } else {
+      updatedRoute = await Route.findByIdAndUpdate(
+        id,
+        { ...data },
+        { new: true }
+      );
+    }
+
+    res.json({
+      updatedRoute,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Contact the administrator",
+    });
+  }
+};
+
 module.exports = {
   routeGet,
   routeGetOne,
   routePost,
+  routePut,
 };
