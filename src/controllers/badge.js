@@ -25,6 +25,7 @@ const badgeGetOne = async (req, res = response) => {
     badge,
   });
 };
+
 const badgePost = async (req, res = response) => {
   // Multer middleware has already handled file upload, so the filename is available in req.file.filename
   const { name, route } = req.body;
@@ -45,7 +46,7 @@ const badgePost = async (req, res = response) => {
       msg: "Route does not exist",
     });
   }
-  
+
   try {
     // Create new badge with image filename and route ID
     const newBadge = new Badge({ name, image, route });
@@ -62,8 +63,32 @@ const badgePost = async (req, res = response) => {
   }
 };
 
+const badgePut = async (req, res = response) => {
+  const { id } = req.params;
+  const { name, route } = req.body;
+  const image = req.file.path;
+
+  try {
+    const updatedBadge = await Badge.findByIdAndUpdate(
+      id,
+      { name, image, route },
+      { new: true }
+    );
+
+    res.json({
+      updatedBadge,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      msg: "Internal server error",
+    });
+  }
+};
+
 module.exports = {
   badgeGet,
   badgeGetOne,
   badgePost,
+  badgePut,
 };

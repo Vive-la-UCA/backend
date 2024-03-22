@@ -1,5 +1,10 @@
 const { Router } = require("express");
-const { badgeGet, badgePost, badgeGetOne } = require("../controllers/badge");
+const {
+  badgeGet,
+  badgePost,
+  badgeGetOne,
+  badgePut,
+} = require("../controllers/badge");
 const { validateJWT, validateFields, isAdminRole } = require("../middlewares");
 const { check } = require("express-validator");
 const { badgeExistsById } = require("../helpers");
@@ -34,6 +39,21 @@ router.post(
     validateFields,
   ],
   badgePost
+);
+
+router.put(
+  "/:id",
+  [
+    validateJWT,
+    upload.single("image"),
+    check("id", "Invalid id").isMongoId(),
+    check("id").custom(badgeExistsById),
+    check("name", "name is required").not().isEmpty(),
+    check("route", "Invalid route").isMongoId(),
+    isAdminRole,
+    validateFields,
+  ],
+  badgePut
 );
 
 module.exports = router;
