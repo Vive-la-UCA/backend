@@ -5,7 +5,8 @@ const { MONGO_HOSTNAME, MONGO_PORT, MONGO_DB } = process.env;
 
 //const url = `mongodb://${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}`;
 //console.log(url);
-const url = `mongodb://mongo/vive_la_uca`;
+const url = `mongodb://mongo:${MONGO_PORT}/vive_la_uca`;
+
 const dbConnection = async () => {
   try {
     await mongoose.connect(url, {
