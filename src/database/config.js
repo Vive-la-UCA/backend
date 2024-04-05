@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const url = `mongodb://mongo/vive_la_uca`;
+//const url = `mongodb://mongo/vive_la_uca`;
+const url = "mongodb://localhost:27017/openhouse"
+
 
 const dbConnection = async () => {
   try {

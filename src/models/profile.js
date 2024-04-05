@@ -23,16 +23,16 @@ const ProfileSchema = new Schema(
       type: String,
       trim: true
     },
-    // faculty: {
-    //   // TODO: Relacionar con el modelo de faculty
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Faculty'
-    // },
-    // grade: {
-    //   // TODO: Relacionar con el modelo de faculty
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Grade'
-    // },
+    faculty: {
+      // TODO: Relacionar con el modelo de faculty
+      type: Schema.Types.ObjectId,
+      ref: 'Faculty'
+    },
+    grade: {
+      // TODO: Relacionar con el modelo de faculty
+      type: Schema.Types.ObjectId,
+      ref: 'Grade'
+    },
     means: {
       type: Boolean,
       default: null
@@ -44,18 +44,18 @@ const ProfileSchema = new Schema(
     medio: {
       type: String,
       default: 'No definido'
-    }
-    // subscribed: [
-    //   {
-    //     student: { type: Schema.Types.ObjectId, ref: 'Event' },
-    //     faculty: { type: Schema.Types.ObjectId, ref: 'Faculty' },
-    //     grade: { type: Schema.Types.ObjectId, ref: 'Grade' },
-    //     completed: {
-    //       type: Boolean,
-    //       default: false
-    //     }
-    //   }
-    // ]
+    },
+    subscribed: [
+      {
+        student: { type: Schema.Types.ObjectId, ref: 'Event' },
+        faculty: { type: Schema.Types.ObjectId, ref: 'Faculty' },
+        grade: { type: Schema.Types.ObjectId, ref: 'Grade' },
+        completed: {
+          type: Boolean,
+          default: false
+        }
+      }
+    ]
   },
   { timestamps: true }
 )
@@ -63,15 +63,19 @@ const ProfileSchema = new Schema(
 ProfileSchema.methods.toJSON = function () {
   const {
     __v,
+    _id,
     createdAt,
     updatedAt,
     networks,
     means,
     parentUca,
     medio,
-    ...user
+    subscribed,
+    faculty,
+    grade,
+    ...profile
   } = this.toObject()
-  user.uid = _id
+  profile.id = _id
   return profile
 }
 
