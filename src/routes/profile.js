@@ -4,3 +4,5 @@ const { profileGet } = require('../controllers/profile')
 const router = Router()
 
 router.get('/', profileGet)
+
+module.exports = router
