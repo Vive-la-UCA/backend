@@ -1,54 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vive la UCA</title>
-  </head>
-  <body>
-    <h1>API</h1>
-
-    <div
-      id="g_id_onload"
-      data-client_id="455738065777-pgromnsf51re4j0t30m2hd601rldd05a.apps.googleusercontent.com"
-      data-auto_prompt="false"
-      data-callback="handleCredentialResponse"
-    ></div>
-
-    <div
-      class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-shape="rectangular"
-      data-logo_alignment="left"
-    ></div>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-
-    <script>
-      function handleCredentialResponse(response) {
-        console.log("id_token", response.credential);
-
-        fetch("http://localhost:8080/api/auth/google", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${response.credential}`,
-          },
-          body: JSON.stringify({}),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-          })
-          .catch((error) => {
-            console.error("Fetch error:", error);
-          });
-      }
-    </script>
-  </body>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf8">
+  <meta name="generator" content="Insomnia Documenter v0.4.1">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="bundle.css">
+  <script defer src="bundle.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+  <noscript>In order to view this documentation page, you have to enable JavaScript in your web browser.</noscript>
+  <div id="app" data-root=""></div>
+</body>
 </html>
