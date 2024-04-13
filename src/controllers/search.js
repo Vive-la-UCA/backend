@@ -25,6 +25,27 @@ const searchBadges = async (term = '', res = response) => {
   })
 }
 
+const searchLocations = async (term = '', res = response) => {
+  const isMongoId = ObjectId.isValid(term)
+
+  if (isMongoId) {
+    const location = await Location.findById(term)
+    return res.json({
+      results: location ? [location] : []
+    })
+  }
+
+  const regex = new RegExp(term, 'i')
+
+  const locations = await Location.find({
+    $or: [{ name: regex }]
+  })
+
+  res.json({
+    results: locations
+  })
+}
+
 const search = (req, res = response) => {
   const { collection, term } = req.params
 
@@ -39,6 +60,7 @@ const search = (req, res = response) => {
       searchBadges(term, res)
       break
     case 'locations':
+      searchLocations(term, res)
       break
     case 'routes':
       break
