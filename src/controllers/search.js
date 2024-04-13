@@ -46,6 +46,27 @@ const searchLocations = async (term = '', res = response) => {
   })
 }
 
+const searchRoutes = async (term = '', res = response) => {
+  const isMongoId = ObjectId.isValid(term)
+
+  if (isMongoId) {
+    const route = await Route.findById(term)
+    return res.json({
+      results: route ? [route] : []
+    })
+  }
+
+  const regex = new RegExp(term, 'i')
+
+  const routes = await Route.find({
+    $or: [{ name: regex }]
+  }).populate('locations', 'name')
+
+  res.json({
+    results: routes
+  })
+}
+
 const search = (req, res = response) => {
   const { collection, term } = req.params
 
@@ -63,10 +84,11 @@ const search = (req, res = response) => {
       searchLocations(term, res)
       break
     case 'routes':
+      searchRoutes(term, res)
       break
     default:
       res.status(500).json({
-        Error: 'Internal server error'
+        error: 'Internal server error'
       })
   }
 }
