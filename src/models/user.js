@@ -1,65 +1,72 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require('mongoose')
+const badge = require('./badge')
 
 const UserSchema = Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, 'Name is required']
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
-      unique: true,
+      required: [true, 'Email is required'],
+      unique: true
     },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, 'Password is required']
     },
     image: {
-      type: String,
+      type: String
     },
     role: {
       type: String,
-      default: "USER_ROLE",
+      default: 'USER_ROLE'
     },
     status: {
       type: Boolean,
-      default: true,
+      default: true
     },
     google: {
       type: Boolean,
-      default: false,
+      default: false
     },
+    badges: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Badge'
+      }
+    ],
     progress: [
       {
         start: Date,
         end: Date,
         route: {
           type: Schema.Types.ObjectId,
-          ref: "Route",
+          ref: 'Route'
         },
         visitedLocations: [
           {
             type: Schema.Types.ObjectId,
-            ref: "Location",
-          },
+            ref: 'Location'
+          }
         ],
         status: {
           type: Boolean,
-          default: false,
-        },
-      },
-    ],
+          default: false
+        }
+      }
+    ]
   },
   {
-    timestamps: true,
+    timestamps: true
   }
-);
+)
 
 UserSchema.methods.toJSON = function () {
-  const { __v, password, _id, createdAt, updatedAt, ...user } = this.toObject();
-  user.uid = _id;
-  return user;
-};
+  const { __v, password, _id, createdAt, updatedAt, ...user } = this.toObject()
+  user.uid = _id
+  return user
+}
 
-module.exports = model("User", UserSchema);
+module.exports = model('User', UserSchema)

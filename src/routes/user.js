@@ -3,10 +3,11 @@ const {
   usersPost,
   usersGet,
   usersGetOne,
-  usersGetNoPagination
+  usersGetNoPagination,
+  addBadgeToUser
 } = require('../controllers/user')
 const { check } = require('express-validator')
-const { emailExists, userExistsById } = require('../helpers')
+const { emailExists, userExistsById, badgeExistsById } = require('../helpers')
 const { validateFields, validateJWT } = require('../middlewares')
 
 const router = Router()
@@ -43,6 +44,20 @@ router.post(
     validateFields
   ],
   usersPost
+)
+
+// Add Badge to User
+router.put(
+  '/add-badge/:id',
+  [
+    check('id', 'Invalid id').isMongoId(),
+    check('id').custom(userExistsById),
+    check('badge', 'Invalid id').isMongoId(),
+    check('badge').custom(badgeExistsById),
+    validateJWT,
+    validateFields
+  ],
+  addBadgeToUser
 )
 
 module.exports = router

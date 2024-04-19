@@ -1,7 +1,7 @@
 const { response, request } = require('express')
 const bcrypt = require('bcryptjs')
 
-const { User } = require('../models')
+const { User, Badge } = require('../models')
 
 const usersGet = async (req = request, res = response) => {
   const { limit = 5, skip = 0 } = req.query
@@ -54,9 +54,50 @@ const usersPost = async (req = request, res = response) => {
   })
 }
 
+const addBadgeToUser = async (req = request, res = response) => {
+  const { id } = req.params
+  const { badge } = req.body
+
+  // check if the badge exists
+  const badgeExists = await Badge.findById(badge)
+
+  if (!badgeExists) {
+    return res.status(400).json({
+      error: 'Badge does not exist'
+    })
+  }
+
+  const user = await User.findById(id)
+
+  if (!user) {
+    return res.status(404).json({
+      error: 'User does not exist'
+    })
+  }
+
+  // check if the badge is already added
+  const badgeAlreadyAdded = user.badges.find(b => b.toString() === badge)
+
+  if (badgeAlreadyAdded) {
+    return res.status(400).json({
+      error: 'Badge is already added'
+    })
+  }
+
+  // add badge to user
+  user.badges.push(badge)
+
+  await user.save()
+
+  res.json({
+    user
+  })
+}
+
 module.exports = {
   usersPost,
   usersGetOne,
   usersGet,
-  usersGetNoPagination
+  usersGetNoPagination,
+  addBadgeToUser
 }
