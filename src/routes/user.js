@@ -8,7 +8,7 @@ const {
 } = require('../controllers/user')
 const { check } = require('express-validator')
 const { emailExists, userExistsById, badgeExistsById } = require('../helpers')
-const { validateFields, validateJWT } = require('../middlewares')
+const { validateFields, validateJWT, isAdminRole } = require('../middlewares')
 
 const router = Router()
 
@@ -41,6 +41,7 @@ router.post(
       'password',
       'Password is required and greater than 8 digits'
     ).isLength({ min: 8 }),
+    isAdminRole,
     validateFields
   ],
   usersPost
