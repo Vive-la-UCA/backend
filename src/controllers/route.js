@@ -16,6 +16,16 @@ const routeGet = async (req, res = response) => {
   })
 }
 
+const routeGetNoPagination = async (req, res = response) => {
+  const query = {}
+
+  const routes = await Route.find(query)
+
+  res.json({
+    routes
+  })
+}
+
 const routeGetOne = async (req, res = response) => {
   const { id } = req.params
 
@@ -127,6 +137,7 @@ const routeDelete = async (req, res = response) => {
 
 module.exports = {
   routeGet,
+  routeGetNoPagination,
   routeGetOne,
   routePost,
   routePut,

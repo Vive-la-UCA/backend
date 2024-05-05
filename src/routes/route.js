@@ -4,7 +4,8 @@ const {
   routeGet,
   routeGetOne,
   routePut,
-  routeDelete
+  routeDelete,
+  routeGetNoPagination
 } = require('../controllers/route')
 const { validateJWT, validateFields, isAdminRole } = require('../middlewares')
 const { check } = require('express-validator')
@@ -16,6 +17,8 @@ const router = Router()
 
 // Get All Routes
 router.get('/', [validateJWT, validateFields], routeGet)
+
+router.get('/all', [validateJWT, validateFields], routeGetNoPagination)
 
 // Get One Route
 router.get(
