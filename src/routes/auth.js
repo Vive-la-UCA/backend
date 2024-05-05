@@ -6,6 +6,7 @@ const {
   checkBearerToken,
   validateJWT,
 } = require("../middlewares");
+const { usersPost } = require("../controllers/user");
 
 const router = Router();
 
@@ -17,6 +18,17 @@ router.post(
     validateFields,
   ],
   login
+);
+
+router.post(
+  "/register",
+  [
+    check("name", "Name is required").not().isEmpty(),
+    check("email", "Enter a valid email").isEmail(),
+    check("password", "Password is required").not().isEmpty(),
+    validateFields,
+  ],
+  usersPost
 );
 
 router.post("/google", [checkBearerToken, validateFields], loginGoogle);
