@@ -4,7 +4,8 @@ const {
   locationGet,
   locationGetOne,
   locationPut,
-  locationDelete
+  locationDelete,
+  locationGetNoPagination
 } = require('../controllers/location')
 const { validateJWT, validateFields, isAdminRole } = require('../middlewares')
 const { check } = require('express-validator')
@@ -15,6 +16,10 @@ const router = Router()
 
 // Get All Locations
 router.get('/', [validateJWT, validateFields], locationGet)
+
+
+// Get All Locations
+router.get('/all', [validateJWT, validateFields], locationGetNoPagination)
 
 // Get One Location
 router.get(

@@ -16,6 +16,16 @@ const locationGet = async (req, res = response) => {
   })
 }
 
+const locationGetNoPagination = async (req, res = response) => {
+  const query = {}
+
+  const locations = await Location.find(query)
+
+  res.json({
+    locations
+  })
+}
+
 const locationGetOne = async (req, res = response) => {
   const { id } = req.params
 
@@ -123,6 +133,7 @@ const locationDelete = async (req, res = response) => {
 
 module.exports = {
   locationGet,
+  locationGetNoPagination,
   locationGetOne,
   locationPost,
   locationPut,
