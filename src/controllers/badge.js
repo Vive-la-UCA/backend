@@ -16,6 +16,14 @@ const badgeGet = async (req, res = response) => {
   })
 }
 
+const badgeGetAll = async (_, res = response) => {
+  const badges = await Badge.find()
+
+  res.json({
+    badges
+  })
+}
+
 const badgeGetOne = async (req, res = response) => {
   const { id } = req.params
 
@@ -150,6 +158,7 @@ const badgeDelete = async (req, res = response) => {
 
 module.exports = {
   badgeGet,
+  badgeGetAll,
   badgeGetOne,
   badgePost,
   badgePut,

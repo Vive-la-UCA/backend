@@ -4,7 +4,8 @@ const {
   badgePost,
   badgeGetOne,
   badgePut,
-  badgeDelete
+  badgeDelete,
+  badgeGetAll
 } = require('../controllers/badge')
 const { validateJWT, validateFields, isAdminRole } = require('../middlewares')
 const { check } = require('express-validator')
@@ -16,6 +17,9 @@ const router = Router()
 
 // Get All Badges
 router.get('/', [validateJWT, validateFields], badgeGet)
+
+// Get All Badges No Pagination
+router.get('/all', [validateJWT, validateFields], badgeGetAll)
 
 // Get One Badge
 router.get(
