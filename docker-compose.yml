@@ -5,7 +5,9 @@ services:
     image: mongo:5.0
     restart: always
     ports:
-      - "27027:27027"
+      - "27027:27017"
+    volumes:
+      - mongodb_data:/data/db
  
   app:
     build: 
@@ -21,4 +23,7 @@ services:
       - .env
     volumes:
       - .:/usr/src/app
-    
+
+volumes:
+  mongodb_data:
+  

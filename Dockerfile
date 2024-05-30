@@ -11,4 +11,7 @@ COPY . .
 
 EXPOSE 5050
 
+# Create the uploads directory
+RUN mkdir -p /usr/src/app/uploads
+
 CMD ["npm", "run", "dev"]
