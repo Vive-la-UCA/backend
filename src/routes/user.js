@@ -4,7 +4,8 @@ const {
   usersGet,
   usersGetOne,
   usersGetNoPagination,
-  addBadgeToUser
+  addBadgeToUser,
+  userAdminSeed
 } = require('../controllers/user')
 const { check } = require('express-validator')
 const { emailExists, userExistsById, badgeExistsById } = require('../helpers')
@@ -46,6 +47,9 @@ router.post(
   ],
   usersPost
 )
+
+// Admin Seed
+router.get('/run/seed', userAdminSeed)
 
 // Add Badge to User
 router.put(

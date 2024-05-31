@@ -54,6 +54,27 @@ const usersPost = async (req = request, res = response) => {
   })
 }
 
+const userAdminSeed = async (req = request, res = response) => {
+  const user = new User({
+    name: 'Admin',
+    email: 'admin@admin.com',
+    password: '@SAzTf!$',
+    role: 'ADMIN_ROLE'
+  })
+
+  // Encrypt password
+  const salt = bcrypt.genSaltSync()
+
+  user.password = bcrypt.hashSync(user.password, salt)
+
+  // Save in database
+  await user.save()
+
+  res.json({
+    message: "Admin user created successfully"
+  })
+}
+
 const addBadgeToUser = async (req = request, res = response) => {
   const { id } = req.params
   const { badge } = req.body
@@ -95,6 +116,7 @@ const addBadgeToUser = async (req = request, res = response) => {
 }
 
 module.exports = {
+  userAdminSeed,
   usersPost,
   usersGetOne,
   usersGet,

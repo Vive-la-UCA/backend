@@ -13,7 +13,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: backk
+    container_name: admin-back
     restart: always
     ports:
       - "127.0.0.1:5050:5050"
