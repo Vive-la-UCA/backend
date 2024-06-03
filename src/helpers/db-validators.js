@@ -48,11 +48,20 @@ const routeExists = async (id = '') => {
   }
 }
 
+const badgeWithRouteExists = async (route = '') => {
+  const exists = await Badge.findOne({ route })
+
+  if (exists) {
+    throw new Error(`There is already a badge with route ${route}`)
+  }
+}
+
 module.exports = {
   emailExists,
   badgeExistsById,
   userExistsById,
   locationExistsById,
   routeExistsById,
-  routeExists
+  routeExists,
+  badgeWithRouteExists
 }

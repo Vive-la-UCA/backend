@@ -9,7 +9,11 @@ const {
 } = require('../controllers/badge')
 const { validateJWT, validateFields, isAdminRole } = require('../middlewares')
 const { check } = require('express-validator')
-const { badgeExistsById, routeExists } = require('../helpers')
+const {
+  badgeExistsById,
+  routeExists,
+  badgeWithRouteExists
+} = require('../helpers')
 const { upload } = require('../middlewares/multer-file')
 fs = require('fs')
 
@@ -41,7 +45,7 @@ router.post(
     upload.single('image'),
     check('name', 'name is required').not().isEmpty(),
     check('route', 'Invalid route').isMongoId(),
-    check('route').custom(routeExists),
+    check('route').custom(badgeWithRouteExists),
     isAdminRole,
     validateFields
   ],
@@ -56,6 +60,7 @@ router.put(
     upload.single('image'),
     check('id', 'Invalid id').isMongoId(),
     check('id').custom(badgeExistsById),
+    
     isAdminRole,
     validateFields
   ],
