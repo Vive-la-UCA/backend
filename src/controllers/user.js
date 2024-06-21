@@ -121,11 +121,29 @@ const addBadgeToUser = async (req = request, res = response) => {
   })
 }
 
+const usersDelete = async (req = request, res = response) => {
+  try {
+    const { id } = req.params
+    const user = await User.findByIdAndDelete(id)
+
+    res.json({
+      message: 'User deleted successfully',
+      user
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      error: 'Error deleting user'
+    })
+  }
+}
+
 module.exports = {
   userAdminSeed,
   usersPost,
   usersGetOne,
   usersGet,
   usersGetNoPagination,
-  addBadgeToUser
+  addBadgeToUser,
+  usersDelete
 }

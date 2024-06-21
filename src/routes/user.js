@@ -5,7 +5,8 @@ const {
   usersGetOne,
   usersGetNoPagination,
   addBadgeToUser,
-  userAdminSeed
+  userAdminSeed,
+  usersDelete
 } = require('../controllers/user')
 const { check } = require('express-validator')
 const { emailExists, userExistsById, badgeExistsById } = require('../helpers')
@@ -63,6 +64,19 @@ router.put(
     validateFields
   ],
   addBadgeToUser
+)
+
+// Delete User
+router.delete(
+  '/:id',
+  [
+    validateJWT,
+    check('id', 'Invalid id').isMongoId(),
+    check('id').custom(userExistsById),
+    isAdminRole,
+    validateFields
+  ],
+  usersDelete
 )
 
 module.exports = router
