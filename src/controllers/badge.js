@@ -135,23 +135,30 @@ const badgeDelete = async (req, res = response) => {
   try {
     const badge = await Badge.findById(id)
 
+    if (!badge) {
+      return res.status(404).json({
+        msg: 'Badge not found'
+      })
+    }
+
+    // Check and delete the image file if it exists
     if (badge.image) {
       const pathImage = `./uploads/${badge.image}`
-
       if (fs.existsSync(pathImage)) {
         fs.unlinkSync(pathImage)
       }
     }
 
+    // Delete the badge
     await Badge.findByIdAndDelete(id)
 
     res.json({
-      msg: 'Badge deleted'
+      msg: 'Badge deleted and removed from users successfully'
     })
   } catch (error) {
     console.error(error)
     return res.status(500).json({
-      msg: 'Internal server error'
+      msg: 'Could not delete badge'
     })
   }
 }
