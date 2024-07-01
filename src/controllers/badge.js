@@ -34,6 +34,16 @@ const badgeGetOne = async (req, res = response) => {
   })
 }
 
+const badgeGetOneByRoute = async ({ params }, res = response) => {
+  const { id } = params
+
+  const badge = await Badge.findOne({ route: id })
+
+  res.json({
+    badge
+  })
+}
+
 const badgePost = async (req, res = response) => {
   // Multer middleware has already handled file upload, so the filename is available in req.file.filename
   const { name, route } = req.body
@@ -167,6 +177,7 @@ module.exports = {
   badgeGet,
   badgeGetAll,
   badgeGetOne,
+  badgeGetOneByRoute,
   badgePost,
   badgePut,
   badgeDelete

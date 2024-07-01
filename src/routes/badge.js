@@ -3,6 +3,7 @@ const {
   badgeGet,
   badgePost,
   badgeGetOne,
+  badgeGetOneByRoute,
   badgePut,
   badgeDelete,
   badgeGetAll
@@ -12,7 +13,8 @@ const { check } = require('express-validator')
 const {
   badgeExistsById,
   routeExists,
-  badgeWithRouteExists
+  badgeWithRouteExists,
+  routeExistsById
 } = require('../helpers')
 const { upload } = require('../middlewares/multer-file')
 fs = require('fs')
@@ -35,6 +37,18 @@ router.get(
     validateFields
   ],
   badgeGetOne
+)
+
+// Get One Badge By Route
+router.get(
+  '/route/:id',
+  [
+    check('id', 'Invalid id').isMongoId(),
+    check('id').custom(routeExistsById),
+    validateJWT,
+    validateFields
+  ],
+  badgeGetOneByRoute
 )
 
 // Create Badge
@@ -60,7 +74,7 @@ router.put(
     upload.single('image'),
     check('id', 'Invalid id').isMongoId(),
     check('id').custom(badgeExistsById),
-    
+
     isAdminRole,
     validateFields
   ],
