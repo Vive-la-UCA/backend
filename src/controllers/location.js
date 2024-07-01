@@ -107,14 +107,6 @@ const locationDelete = async (req, res = response) => {
 
   const location = await Location.findById(id)
 
-  if (location.image) {
-    const pathImage = `./uploads/${location.image}`
-
-    if (fs.existsSync(pathImage)) {
-      fs.unlinkSync(pathImage)
-    }
-  }
-
   // check if the location is in any route
   const isUsed = await Route.findOne({ locations: id })
 
@@ -122,6 +114,14 @@ const locationDelete = async (req, res = response) => {
     return res.status(400).json({
       msg: 'Location is in use'
     })
+  }
+
+  if (location.image) {
+    const pathImage = `./uploads/${location.image}`
+
+    if (fs.existsSync(pathImage)) {
+      fs.unlinkSync(pathImage)
+    }
   }
 
   await Location.findByIdAndDelete(id)

@@ -29,7 +29,7 @@ const routeGetNoPagination = async (req, res = response) => {
 const routeGetOne = async (req, res = response) => {
   const { id } = req.params
 
-  const route = await Route.findById(id).populate('locations', 'name')
+  const route = await Route.findById(id).populate('locations')
 
   res.json({
     route
@@ -111,14 +111,6 @@ const routeDelete = async (req, res = response) => {
 
   const route = await Route.findById(id)
 
-  if (route.image) {
-    const pathImage = `./uploads/${route.image}`
-
-    if (fs.existsSync(pathImage)) {
-      fs.unlinkSync(pathImage)
-    }
-  }
-
   // check if the route is in one badge
   const badges = await Badge.find({ route: id })
 
@@ -126,6 +118,14 @@ const routeDelete = async (req, res = response) => {
     return res.status(400).json({
       msg: 'Route is in one or more badges'
     })
+  }
+
+  if (route.image) {
+    const pathImage = `./uploads/${route.image}`
+
+    if (fs.existsSync(pathImage)) {
+      fs.unlinkSync(pathImage)
+    }
   }
 
   await Route.findByIdAndDelete(id)
