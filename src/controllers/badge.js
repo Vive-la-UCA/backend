@@ -2,9 +2,13 @@ const { response } = require('express')
 const { Badge, Route } = require('../models')
 
 const badgeGet = async (req, res = response) => {
+  // pagination options
   const { limit = 5, skip = 0 } = req.query
+
+  // query options
   const query = {}
 
+  // Get total count and badges
   const [total, badges] = await Promise.all([
     Badge.countDocuments(query),
     Badge.find(query).limit(Number(limit)).skip(Number(skip))
@@ -17,6 +21,7 @@ const badgeGet = async (req, res = response) => {
 }
 
 const badgeGetAll = async (_, res = response) => {
+  // Get all badges without pagination
   const badges = await Badge.find()
 
   res.json({
@@ -25,6 +30,7 @@ const badgeGetAll = async (_, res = response) => {
 }
 
 const badgeGetOne = async (req, res = response) => {
+  // Get badge by ID and populate the route name
   const { id } = req.params
 
   const badge = await Badge.findById(id).populate('route', 'name')
@@ -35,6 +41,7 @@ const badgeGetOne = async (req, res = response) => {
 }
 
 const badgeGetOneByRoute = async ({ params }, res = response) => {
+  // Get badge by route ID
   const { id } = params
 
   const badge = await Badge.findOne({ route: id })
@@ -92,11 +99,13 @@ const badgePost = async (req, res = response) => {
 }
 
 const badgePut = async (req, res = response) => {
+  // Get the id from the params and the data from the body
   const { id } = req.params
   const { ...data } = req.body
 
   let image
 
+  // Check if there's a file uploaded and set the image variable
   if (req.file) {
     image = req.file.filename
   }
@@ -107,6 +116,8 @@ const badgePut = async (req, res = response) => {
     if (image) {
       // remove old image
       const badge = await Badge.findById(id)
+
+      // Check and delete the image file if it exists
       if (badge.image) {
         const pathImage = `./uploads/${badge.image}`
 
@@ -115,12 +126,14 @@ const badgePut = async (req, res = response) => {
         }
       }
 
+      // Update the badge with the new image
       updatedBadge = await Badge.findByIdAndUpdate(
         id,
         { ...data, image }, // Include image data if present
         { new: true }
       )
     } else {
+      // Update the badge without the image
       updatedBadge = await Badge.findByIdAndUpdate(
         id,
         data, // Update only the data if no image
@@ -140,11 +153,14 @@ const badgePut = async (req, res = response) => {
 }
 
 const badgeDelete = async (req, res = response) => {
+  // Get the badge ID from the params
   const { id } = req.params
 
   try {
+    // Find the badge by ID
     const badge = await Badge.findById(id)
 
+    // Check if the badge exists and return an error if it doesn't
     if (!badge) {
       return res.status(404).json({
         msg: 'Badge not found'
