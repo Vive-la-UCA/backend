@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const url = `mongodb://mongo/vive_la_uca`;
 
+
 const dbConnection = async () => {
   try {
     await mongoose.connect(url, {
