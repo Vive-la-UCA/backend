@@ -18,6 +18,7 @@ const router = Router()
 // Get All Routes
 router.get('/', [validateJWT, validateFields], routeGet)
 
+// Get All Routes No Pagination
 router.get('/all', [validateJWT, validateFields], routeGetNoPagination)
 
 // Get One Route
@@ -37,7 +38,7 @@ router.post(
   '/',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('name', 'name is required').not().isEmpty(),
     check('description', 'description is required').not().isEmpty(),
     check('locations', 'locations is required').not().isEmpty(),
@@ -51,7 +52,7 @@ router.put(
   '/:id',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('id', 'Invalid id').isMongoId(),
     check('id').custom(routeExistsById),
     isAdminRole,

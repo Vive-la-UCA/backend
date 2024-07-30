@@ -56,7 +56,7 @@ router.post(
   '/',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('name', 'name is required').not().isEmpty(),
     check('route', 'Invalid route').isMongoId(),
     check('route').custom(badgeWithRouteExists),
@@ -71,10 +71,9 @@ router.put(
   '/:id',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('id', 'Invalid id').isMongoId(),
     check('id').custom(badgeExistsById),
-
     isAdminRole,
     validateFields
   ],

@@ -11,6 +11,7 @@ const { emailExists } = require('../helpers')
 
 const router = Router()
 
+// Login endpoint
 router.post(
   '/login',
   [
@@ -21,6 +22,7 @@ router.post(
   login
 )
 
+// Register endpoint
 router.post(
   '/register',
   [
@@ -37,8 +39,10 @@ router.post(
   usersPost
 )
 
+// Google login endpoint
 router.post('/google', [checkBearerToken, validateFields], loginGoogle)
 
+// Check token endpoint
 router.get('/check-token', [validateJWT, validateFields], checkToken)
 
 module.exports = router
