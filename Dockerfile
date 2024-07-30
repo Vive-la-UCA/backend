@@ -1,7 +1,10 @@
-FROM node:18-alpine
+FROM node:19-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
+
+# Create the uploads directory
+RUN mkdir -p /usr/src/app/uploads
 
 COPY package*.json ./
 
@@ -9,6 +12,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 8080
+EXPOSE 5050
 
 CMD ["npm", "run", "dev"]

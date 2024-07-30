@@ -17,7 +17,6 @@ const router = Router()
 // Get All Locations
 router.get('/', [validateJWT, validateFields], locationGet)
 
-
 // Get All Locations
 router.get('/all', [validateJWT, validateFields], locationGetNoPagination)
 
@@ -38,7 +37,7 @@ router.post(
   '/',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('name', 'name is required').not().isEmpty(),
     check('latitude', 'latitude is required').not().isEmpty(),
     check('longitude', 'longitude is required').not().isEmpty(),
@@ -52,7 +51,7 @@ router.put(
   '/:id',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('id', 'Invalid id').isMongoId(),
     check('id').custom(locationExistsById),
     isAdminRole,

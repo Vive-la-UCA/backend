@@ -1,5 +1,6 @@
 const { Route, User, Badge, Location } = require('../models')
 
+// Check if a user with the email already exists
 const emailExists = async (email = '') => {
   const exists = await User.findOne({ email })
 
@@ -8,6 +9,7 @@ const emailExists = async (email = '') => {
   }
 }
 
+// Check if a badge with the id exists
 const badgeExistsById = async (id = '') => {
   const exists = await Badge.findById(id)
 
@@ -16,6 +18,7 @@ const badgeExistsById = async (id = '') => {
   }
 }
 
+// Check if a location with the id exists
 const locationExistsById = async (id = '') => {
   const exists = await Location.findById(id)
 
@@ -24,6 +27,7 @@ const locationExistsById = async (id = '') => {
   }
 }
 
+// Check if a user with the id exists
 const userExistsById = async (id = '') => {
   const exists = await User.findById(id)
 
@@ -32,6 +36,7 @@ const userExistsById = async (id = '') => {
   }
 }
 
+// Check if a route with the id exists
 const routeExistsById = async (id = '') => {
   const exists = await Route.findById(id)
 
@@ -40,11 +45,21 @@ const routeExistsById = async (id = '') => {
   }
 }
 
+// Check if a route with the id exists
 const routeExists = async (id = '') => {
   const exists = await Route.findById(id)
 
   if (exists) {
     throw new Error(`The route with id ${id} already exists`)
+  }
+}
+
+// Check if a badge with the route already exists
+const badgeWithRouteExists = async (route = '') => {
+  const exists = await Badge.findOne({ route })
+
+  if (exists) {
+    throw new Error(`There is already a badge with route ${route}`)
   }
 }
 
@@ -54,5 +69,6 @@ module.exports = {
   userExistsById,
   locationExistsById,
   routeExistsById,
-  routeExists
+  routeExists,
+  badgeWithRouteExists
 }

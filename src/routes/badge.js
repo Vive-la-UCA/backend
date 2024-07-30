@@ -3,13 +3,19 @@ const {
   badgeGet,
   badgePost,
   badgeGetOne,
+  badgeGetOneByRoute,
   badgePut,
   badgeDelete,
   badgeGetAll
 } = require('../controllers/badge')
 const { validateJWT, validateFields, isAdminRole } = require('../middlewares')
 const { check } = require('express-validator')
-const { badgeExistsById, routeExists } = require('../helpers')
+const {
+  badgeExistsById,
+  routeExists,
+  badgeWithRouteExists,
+  routeExistsById
+} = require('../helpers')
 const { upload } = require('../middlewares/multer-file')
 fs = require('fs')
 
@@ -33,15 +39,27 @@ router.get(
   badgeGetOne
 )
 
+// Get One Badge By Route
+router.get(
+  '/route/:id',
+  [
+    check('id', 'Invalid id').isMongoId(),
+    check('id').custom(routeExistsById),
+    validateJWT,
+    validateFields
+  ],
+  badgeGetOneByRoute
+)
+
 // Create Badge
 router.post(
   '/',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('name', 'name is required').not().isEmpty(),
     check('route', 'Invalid route').isMongoId(),
-    check('route').custom(routeExists),
+    check('route').custom(badgeWithRouteExists),
     isAdminRole,
     validateFields
   ],
@@ -53,7 +71,7 @@ router.put(
   '/:id',
   [
     validateJWT,
-    upload.single('image'),
+    upload.single('image'), // multer middleware to upload file
     check('id', 'Invalid id').isMongoId(),
     check('id').custom(badgeExistsById),
     isAdminRole,

@@ -10,6 +10,7 @@ const login = async (req, res = response) => {
     // check if the email exists
     const user = await User.findOne({ email })
 
+    // if user does not exist return error
     if (!user) {
       return res.status(400).json({
         error: 'Check credentials'
@@ -93,6 +94,7 @@ const loginGoogle = async (req, res = response) => {
 }
 
 const checkToken = async (req, res = response) => {
+  // get user from request
   const user = req.user
 
   res.json({
