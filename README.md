@@ -6,6 +6,7 @@ This project is a backend service built using Node.js and Express, designed to h
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Usage](#usage)
 
 ## Prerequisites
 
